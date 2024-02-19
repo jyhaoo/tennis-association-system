@@ -20,6 +20,11 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public PlayerEntity save(PlayerEntity playerEntity) {
+        return playerRepository.save(playerEntity);
+    }
+
+    @Override
     public List<PlayerEntity> findAll() {
         return StreamSupport.stream(playerRepository
                 .findAll()
@@ -33,8 +38,4 @@ public class PlayerServiceImpl implements PlayerService {
         return playerRepository.findById(id);
     }
 
-    @Override
-    public boolean isExists(Long id) {
-        return playerRepository.existsById(id);
-    }
 }

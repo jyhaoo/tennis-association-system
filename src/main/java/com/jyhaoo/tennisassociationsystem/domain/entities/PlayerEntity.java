@@ -1,8 +1,6 @@
 package com.jyhaoo.tennisassociationsystem.domain.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class PlayerEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "player_id_seq")
     private Long id;
 
     private String name;

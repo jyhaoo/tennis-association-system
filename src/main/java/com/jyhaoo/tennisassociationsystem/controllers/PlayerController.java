@@ -24,11 +24,11 @@ public class PlayerController {
         this.playerMapper = playerMapper;
     }
 
-    @PostMapping(path = "/players/{id}")
-    public ResponseEntity<PlayerDto> createPlayer(@PathVariable("id") Long id, @RequestBody PlayerDto playerDto) {
+    @PostMapping(path = "/players")
+    public ResponseEntity<PlayerDto> createPlayer(@RequestBody PlayerDto playerDto) {
         PlayerEntity playerEntity = playerMapper.mapFrom(playerDto);
-        boolean playerExists = playerService.isExists(id);
-        return null;
+        PlayerEntity savedPlayerEntity = playerService.save(playerEntity);
+        return new ResponseEntity<>(playerMapper.mapTo(savedPlayerEntity), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/players")
