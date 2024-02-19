@@ -6,6 +6,7 @@ import com.jyhaoo.tennisassociationsystem.services.PlayerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -25,5 +26,15 @@ public class PlayerServiceImpl implements PlayerService {
                 .spliterator(),
                 false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<PlayerEntity> findOne(Long id) {
+        return playerRepository.findById(id);
+    }
+
+    @Override
+    public boolean isExists(Long id) {
+        return playerRepository.existsById(id);
     }
 }
