@@ -4,7 +4,9 @@ import com.jyhaoo.tennisassociationsystem.domain.dto.PlayerDto;
 import com.jyhaoo.tennisassociationsystem.domain.entities.PlayerEntity;
 import com.jyhaoo.tennisassociationsystem.mappers.Mapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PlayerMapperImpl implements Mapper<PlayerEntity, PlayerDto> {
 
     private final ModelMapper modelMapper;
