@@ -20,4 +20,6 @@ public class PlayerController {
     public List<PlayerEntity> listPlayers() {
         return playerService.findAll();
     }
+
+
 }

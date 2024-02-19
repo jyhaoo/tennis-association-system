@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 public class PlayerEntity {
 
     @Id
-    private String id;
+    private Long id;
 
     private String name;
 
-    private Long rating;
+    private Double rating;
 
 }
