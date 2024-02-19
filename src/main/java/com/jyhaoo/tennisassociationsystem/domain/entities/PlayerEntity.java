@@ -1,2 +1,26 @@
-package com.jyhaoo.tennisassociationsystem.domain.entities;public class PlayerEntity {
+package com.jyhaoo.tennisassociationsystem.domain.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "player")
+public class PlayerEntity {
+
+    @Id
+    private String id;
+
+    private String name;
+
+    private Long rating;
+
 }
