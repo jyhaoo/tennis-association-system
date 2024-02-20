@@ -22,4 +22,5 @@ public class TeamEntity {
 
     private String name;
 
+//    private List<PlayerEntity> teammates;
 }

@@ -17,5 +17,5 @@ public class TeamDto {
 
     private String name;
 
-    private List<PlayerEntity> teamMembers;
+//    private List<PlayerEntity> teamMembers;
 }

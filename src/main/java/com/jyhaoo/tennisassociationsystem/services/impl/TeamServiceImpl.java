@@ -7,6 +7,10 @@ import com.jyhaoo.tennisassociationsystem.repositories.TeamRepository;
 import com.jyhaoo.tennisassociationsystem.services.TeamService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @Service
 public class TeamServiceImpl implements TeamService {
 
@@ -20,5 +24,13 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamEntity save(TeamEntity teamEntity) {
         return teamRepository.save(teamEntity);
+    }
+
+    @Override
+    public List<TeamEntity> findAll() {
+        return StreamSupport.stream(teamRepository
+                .findAll()
+                .spliterator(), false)
+                .collect(Collectors.toList());
     }
 }
