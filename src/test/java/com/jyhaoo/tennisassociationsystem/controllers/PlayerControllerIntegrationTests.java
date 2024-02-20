@@ -40,7 +40,6 @@ public class PlayerControllerIntegrationTests {
     public void testThatCreatePlayerSuccessfullyReturns201Created() throws Exception {
         PlayerEntity testPlayer = TestDataUtil.createTestPlayerEntityA();
         testPlayer.setId(null);
-
         String playerJson = objectMapper.writeValueAsString(testPlayer);
 
         mockMvc.perform(
@@ -49,6 +48,50 @@ public class PlayerControllerIntegrationTests {
                         .content(playerJson)
         ).andExpect(
                 MockMvcResultMatchers.status().isCreated()
+        );
+    }
+
+    @Test
+    public void testThatCreatePlayerSuccessfullyReturnsSavedPlayer() throws Exception {
+        PlayerEntity testPlayer = TestDataUtil.createTestPlayerEntityA();
+        testPlayer.setId(null);
+        String playerJson = objectMapper.writeValueAsString(testPlayer);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/players")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(testPlayer.getName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.rating").value(testPlayer.getRating())
+        );
+    }
+
+    @Test
+    public void testThatListPlayersReturnHttpStatus200Ok() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/players")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testThatListPlayersReturnListOfPlayers() throws Exception {
+        PlayerEntity testPlayer = TestDataUtil.createTestPlayerEntityA();
+        playerService.save(testPlayer);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/players")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].name").value(testPlayer.getName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].rating").value(testPlayer.getRating())
         );
     }
 }
