@@ -49,4 +49,18 @@ public class PlayerController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND)
         );
     }
+
+    @PutMapping(path = "/players/{id}")
+    public ResponseEntity<PlayerDto> fullUpdatePlayer(
+            @PathVariable("id") Long id,
+            @RequestBody PlayerDto playerDto) {
+        if(!playerService.exists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        playerDto.setId(id);
+        PlayerEntity savedPlayer = playerService.save(playerMapper.mapFrom(playerDto));
+        return new ResponseEntity<>(
+                playerMapper.mapTo(savedPlayer),
+                HttpStatus.OK);
+    }
 }

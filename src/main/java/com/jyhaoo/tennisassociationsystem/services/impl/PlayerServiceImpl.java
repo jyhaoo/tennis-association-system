@@ -38,4 +38,8 @@ public class PlayerServiceImpl implements PlayerService {
         return playerRepository.findById(id);
     }
 
+    @Override
+    public boolean exists(Long id) {
+        return playerRepository.existsById(id);
+    }
 }
