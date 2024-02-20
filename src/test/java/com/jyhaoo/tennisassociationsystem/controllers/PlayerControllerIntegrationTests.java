@@ -36,6 +36,15 @@ public class PlayerControllerIntegrationTests {
         this.objectMapper = objectMapper;
     }
 
+    /* Http Status Codes */
+    @Test
+    public void testThatListPlayersReturnHttpStatus200() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/players")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
     @Test
     public void testThatCreatePlayerSuccessfullyReturns201Created() throws Exception {
         PlayerEntity testPlayer = TestDataUtil.createTestPlayerEntityA();
@@ -50,6 +59,27 @@ public class PlayerControllerIntegrationTests {
                 MockMvcResultMatchers.status().isCreated()
         );
     }
+
+    @Test
+    public void testThatGetPlayersReturnsHttpStatus200WhenPlayerExist() throws Exception {
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        playerService.save(player);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/players/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testThatGetPlayersReturnHttpStatus404WhenNoPlayerExist() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/players/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    /* Other functionality */
 
     @Test
     public void testThatCreatePlayerSuccessfullyReturnsSavedPlayer() throws Exception {
@@ -68,14 +98,6 @@ public class PlayerControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.rating").value(testPlayer.getRating())
         );
-    }
-
-    @Test
-    public void testThatListPlayersReturnHttpStatus200Ok() throws Exception {
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/players")
-                        .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
