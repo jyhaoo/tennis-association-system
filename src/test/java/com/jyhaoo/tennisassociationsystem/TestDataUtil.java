@@ -2,6 +2,7 @@ package com.jyhaoo.tennisassociationsystem;
 
 import com.jyhaoo.tennisassociationsystem.domain.dto.PlayerDto;
 import com.jyhaoo.tennisassociationsystem.domain.entities.PlayerEntity;
+import com.jyhaoo.tennisassociationsystem.domain.entities.TeamEntity;
 
 public final class TestDataUtil {
 
@@ -50,6 +51,13 @@ public final class TestDataUtil {
                 .id(3L)
                 .name("Milos Raonic")
                 .rating(4.0)
+                .build();
+    }
+
+    public static TeamEntity createTestTeamEntityA() {
+        return TeamEntity.builder()
+                .id(1L)
+                .name("East Side Eagles")
                 .build();
     }
 }
