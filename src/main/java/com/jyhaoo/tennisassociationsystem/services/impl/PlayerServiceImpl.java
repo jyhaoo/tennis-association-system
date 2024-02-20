@@ -53,4 +53,9 @@ public class PlayerServiceImpl implements PlayerService {
             return playerRepository.save(existingPlayer);
         }).orElseThrow(() -> new RuntimeException("Player does not exist"));
     }
+
+    @Override
+    public void deletePlayer(Long id) {
+        playerRepository.deleteById(id);
+    }
 }
