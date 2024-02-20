@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -115,6 +116,14 @@ public class PlayerControllerIntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(playerString)
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void testThatDeletePlayerReturnsHttpStatus204() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/players/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     /* Create & Read */
