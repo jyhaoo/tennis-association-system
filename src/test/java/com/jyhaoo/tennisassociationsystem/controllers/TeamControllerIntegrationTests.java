@@ -49,4 +49,14 @@ public class TeamControllerIntegrationTests {
                 MockMvcResultMatchers.status().isCreated()
         );
     }
+
+    @Test
+    public void testThatGetTeamsSuccessfullyReturns200() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/teams")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
 }

@@ -58,6 +58,7 @@ public final class TestDataUtil {
         return TeamEntity.builder()
                 .id(1L)
                 .name("East Side Eagles")
+                // .teammates(null)
                 .build();
     }
 }
