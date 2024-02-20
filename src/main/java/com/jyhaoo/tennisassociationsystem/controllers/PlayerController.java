@@ -63,4 +63,20 @@ public class PlayerController {
                 playerMapper.mapTo(savedPlayer),
                 HttpStatus.OK);
     }
+
+    @PatchMapping(path = "/players/{id}")
+    public ResponseEntity<PlayerDto> partialUpdate(
+            @PathVariable("id") Long id,
+            @RequestBody PlayerDto playerDto
+    ) {
+        if (!playerService.exists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        PlayerEntity playerEntity = playerMapper.mapFrom(playerDto);
+        PlayerEntity updatedPlayerEntity = playerService.partialUpdate(id, playerEntity);
+        return new ResponseEntity<>(
+                playerMapper.mapTo(updatedPlayerEntity),
+                HttpStatus.OK
+        );
+    }
 }

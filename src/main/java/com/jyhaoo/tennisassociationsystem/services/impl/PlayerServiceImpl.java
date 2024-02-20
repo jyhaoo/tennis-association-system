@@ -42,4 +42,15 @@ public class PlayerServiceImpl implements PlayerService {
     public boolean exists(Long id) {
         return playerRepository.existsById(id);
     }
+
+    @Override
+    public PlayerEntity partialUpdate(Long id, PlayerEntity playerEntity) {
+        playerEntity.setId(id);
+
+        return playerRepository.findById(id).map(existingPlayer -> {
+            Optional.ofNullable(playerEntity.getName()).ifPresent(existingPlayer::setName);
+            Optional.ofNullable(playerEntity.getRating()).ifPresent(existingPlayer::setRating);
+            return playerRepository.save(existingPlayer);
+        }).orElseThrow(() -> new RuntimeException("Player does not exist"));
+    }
 }

@@ -14,4 +14,6 @@ public interface PlayerService {
     Optional<PlayerEntity> findOne(Long id);
 
     boolean exists(Long id);
+
+    PlayerEntity partialUpdate(Long id, PlayerEntity playerEntity);
 }
