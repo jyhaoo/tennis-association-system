@@ -90,6 +90,33 @@ public class PlayerControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    public void testThatPartialUpdatePlayerReturnsStatus200() throws Exception {
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        playerService.save(player);
+
+        player.setName("Tommy Paul");
+        String playerString = objectMapper.writeValueAsString(player);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/players/" + player.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerString)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testThatPartialUpdatePlayerReturnsStatus400ForNonExistingPlayer() throws Exception {
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        String playerString = objectMapper.writeValueAsString(player);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/players/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerString)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
     /* Create & Read */
 
     @Test
@@ -149,6 +176,27 @@ public class PlayerControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.name").value(putPlayer.getName())
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.rating").value(putPlayer.getRating())
+        );
+    }
+
+    @Test
+    public void testThatPartialUpdatePlayerReturnsUpdatedPlayer() throws Exception {
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        PlayerEntity savedPlayer = playerService.save(player);
+
+        player.setName("Tommy Paul");
+        String playerString = objectMapper.writeValueAsString(player);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/players/" + savedPlayer.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerString)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedPlayer.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(player.getName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.rating").value(player.getRating())
         );
     }
 }
