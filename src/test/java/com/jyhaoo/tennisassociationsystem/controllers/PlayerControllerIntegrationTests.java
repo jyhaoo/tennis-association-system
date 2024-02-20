@@ -1,6 +1,5 @@
 package com.jyhaoo.tennisassociationsystem.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jyhaoo.tennisassociationsystem.TestDataUtil;
 import com.jyhaoo.tennisassociationsystem.domain.entities.PlayerEntity;
@@ -47,9 +46,9 @@ public class PlayerControllerIntegrationTests {
 
     @Test
     public void testThatCreatePlayerSuccessfullyReturns201Created() throws Exception {
-        PlayerEntity testPlayer = TestDataUtil.createTestPlayerEntityA();
-        testPlayer.setId(null);
-        String playerJson = objectMapper.writeValueAsString(testPlayer);
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        player.setId(null);
+        String playerJson = objectMapper.writeValueAsString(player);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/players")
@@ -79,13 +78,25 @@ public class PlayerControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
-    /* Other functionality */
+    @Test
+    public void testThatFullyUpdatePlayerReturnHttpStatus200() throws Exception {
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        playerService.save(player);
+        String playerString = objectMapper.writeValueAsString(player);
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/players/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerString)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    /* Create & Read */
 
     @Test
     public void testThatCreatePlayerSuccessfullyReturnsSavedPlayer() throws Exception {
-        PlayerEntity testPlayer = TestDataUtil.createTestPlayerEntityA();
-        testPlayer.setId(null);
-        String playerJson = objectMapper.writeValueAsString(testPlayer);
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        player.setId(null);
+        String playerJson = objectMapper.writeValueAsString(player);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/players")
@@ -94,16 +105,16 @@ public class PlayerControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value(testPlayer.getName())
+                MockMvcResultMatchers.jsonPath("$.name").value(player.getName())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.rating").value(testPlayer.getRating())
+                MockMvcResultMatchers.jsonPath("$.rating").value(player.getRating())
         );
     }
 
     @Test
     public void testThatListPlayersReturnListOfPlayers() throws Exception {
-        PlayerEntity testPlayer = TestDataUtil.createTestPlayerEntityA();
-        playerService.save(testPlayer);
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        playerService.save(player);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/players")
@@ -111,9 +122,33 @@ public class PlayerControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].name").value(testPlayer.getName())
+                MockMvcResultMatchers.jsonPath("$[0].name").value(player.getName())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].rating").value(testPlayer.getRating())
+                MockMvcResultMatchers.jsonPath("$[0].rating").value(player.getRating())
+        );
+    }
+
+    /* Modify */
+    @Test
+    public void testThatFullyUpdatesExistingPlayer() throws Exception {
+        PlayerEntity player = TestDataUtil.createTestPlayerEntityA();
+        PlayerEntity savedPlayer = playerService.save(player);
+
+        PlayerEntity putPlayer = TestDataUtil.createTestPlayerEntityB();
+        putPlayer.setId(savedPlayer.getId());
+
+        String putPlayerString = objectMapper.writeValueAsString(putPlayer);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/players/" + savedPlayer.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(putPlayerString)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedPlayer.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(putPlayer.getName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.rating").value(putPlayer.getRating())
         );
     }
 }
