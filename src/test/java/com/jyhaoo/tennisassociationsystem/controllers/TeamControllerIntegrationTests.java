@@ -59,4 +59,26 @@ public class TeamControllerIntegrationTests {
                 MockMvcResultMatchers.status().isOk()
         );
     }
+
+    @Test
+    public void testThatGetTeamByIdSuccessfullyReturn200IfExists() throws Exception {
+        TeamEntity team = TestDataUtil.createTestTeamEntityA();
+        teamService.save(team);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/teams/" + team.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatGetTeamByIdReturns400IfTeamDoesNotExist() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/teams/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
 }
