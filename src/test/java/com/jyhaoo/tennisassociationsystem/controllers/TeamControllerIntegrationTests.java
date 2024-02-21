@@ -82,6 +82,21 @@ public class TeamControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatPutTeamReturns200() throws Exception {
+        TeamEntity team = TestDataUtil.createTestTeamEntityA();
+        teamService.save(team);
+        String teamString = objectMapper.writeValueAsString(team);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/teams/" + team.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(teamString)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
     /* Create & Read */
     @Test
     public void testThatGetOneTeamReturnsTeam() throws Exception {
@@ -107,6 +122,25 @@ public class TeamControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].name").value(team.getName())
+        );
+    }
+
+    @Test
+    public void testThatPutTeamReturnsUpdatedTeam() throws Exception {
+        TeamEntity teamA = TestDataUtil.createTestTeamEntityA();
+        teamService.save(teamA);
+        TeamEntity teamB = TestDataUtil.createTestTeamEntityB();
+        teamB.setId(teamA.getId());
+        String teamBString = objectMapper.writeValueAsString(teamB);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/teams/" + teamA.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(teamBString)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(teamA.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(teamB.getName())
         );
     }
 }
