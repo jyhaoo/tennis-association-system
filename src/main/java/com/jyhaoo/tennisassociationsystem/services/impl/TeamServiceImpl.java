@@ -39,4 +39,9 @@ public class TeamServiceImpl implements TeamService {
     public Optional<TeamEntity> findOne(Long id) {
         return teamRepository.findById(id);
     }
+
+    @Override
+    public boolean exists(Long id) {
+        return teamRepository.existsById(id);
+    }
 }

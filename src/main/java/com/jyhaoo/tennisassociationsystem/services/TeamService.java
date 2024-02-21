@@ -12,4 +12,6 @@ public interface TeamService {
     List<TeamEntity> findAll();
 
     Optional<TeamEntity> findOne(Long id);
+
+    boolean exists(Long id);
 }

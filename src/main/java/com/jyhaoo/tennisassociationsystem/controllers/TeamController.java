@@ -49,4 +49,17 @@ public class TeamController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND)
         );
     }
+
+    @PutMapping(path = "/teams/{id}")
+    public ResponseEntity<TeamDto> fullUpdateTeam(
+            @PathVariable("id") Long id,
+            @RequestBody TeamDto teamDto
+    ) {
+        if(!teamService.exists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        teamDto.setId(id);
+        TeamEntity savedTeam = teamService.save(teamMapper.mapFrom(teamDto));
+        return new ResponseEntity<>(teamMapper.mapTo(savedTeam), HttpStatus.OK);
+    }
 }
