@@ -8,6 +8,7 @@ import com.jyhaoo.tennisassociationsystem.services.TeamService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,5 +33,10 @@ public class TeamServiceImpl implements TeamService {
                 .findAll()
                 .spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<TeamEntity> findOne(Long id) {
+        return teamRepository.findById(id);
     }
 }

@@ -6,12 +6,10 @@ import com.jyhaoo.tennisassociationsystem.services.TeamService;
 import com.jyhaoo.tennisassociationsystem.mappers.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,5 +37,16 @@ public class TeamController {
         return new ResponseEntity<>(teams.stream()
                 .map(teamMapper::mapTo)
                 .collect(Collectors.toList()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/teams/{id}")
+    public ResponseEntity<TeamDto> getTeam(@PathVariable("id") Long id) {
+        Optional<TeamEntity> foundTeam = teamService.findOne(id);
+        return foundTeam.map(teamEntity -> {
+            TeamDto teamDto = teamMapper.mapTo(teamEntity);
+            return new ResponseEntity<>(teamDto, HttpStatus.OK);
+        }).orElse(
+                new ResponseEntity<>(HttpStatus.NOT_FOUND)
+        );
     }
 }
