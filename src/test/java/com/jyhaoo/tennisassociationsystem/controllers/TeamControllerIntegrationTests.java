@@ -81,4 +81,32 @@ public class TeamControllerIntegrationTests {
                 MockMvcResultMatchers.status().isNotFound()
         );
     }
+
+    /* Create & Read */
+    @Test
+    public void testThatGetOneTeamReturnsTeam() throws Exception {
+        TeamEntity team = TestDataUtil.createTestTeamEntityA();
+        teamService.save(team);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/teams/" + team.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(team.getName())
+        );
+    }
+
+    @Test
+    public void testThatGetTeamsReturnsListOfTeams() throws Exception {
+        TeamEntity team = TestDataUtil.createTestTeamEntityA();
+        teamService.save(team);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/teams")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].name").value(team.getName())
+        );
+    }
 }

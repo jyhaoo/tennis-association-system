@@ -61,4 +61,11 @@ public final class TestDataUtil {
                 // .teammates(null)
                 .build();
     }
+
+    public static TeamEntity createTestTeamEntityB() {
+        return TeamEntity.builder()
+                .id(2L)
+                .name("West Side Wall")
+                .build();
+    }
 }
