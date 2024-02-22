@@ -2,6 +2,7 @@ package com.jyhaoo.tennisassociationsystem.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jyhaoo.tennisassociationsystem.TestDataUtil;
+import com.jyhaoo.tennisassociationsystem.domain.dto.TeamDto;
 import com.jyhaoo.tennisassociationsystem.domain.entities.TeamEntity;
 import com.jyhaoo.tennisassociationsystem.services.TeamService;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import javax.print.attribute.standard.Media;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -97,6 +100,34 @@ public class TeamControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatPartialUpdateExistingTeamReturnsHttpStatus200() throws Exception {
+        TeamEntity teamEntity = TestDataUtil.createTestTeamEntityA();
+        TeamEntity savedTeam = teamService.save(teamEntity);
+
+        TeamDto teamDto = TestDataUtil.createTestTeamDto();
+        teamDto.setId(savedTeam.getId());
+        String teamDtoJson = objectMapper.writeValueAsString(teamDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/teams/" + savedTeam.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(teamDtoJson)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testThatPartialUpdateExistingTeamReturnsHttpStatus404ForTeamDoesNotExist() throws Exception {
+        TeamDto teamDto = TestDataUtil.createTestTeamDto();
+        String teamDtoJson = objectMapper.writeValueAsString(teamDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/teams/" + teamDto.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(teamDtoJson)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
     /* Create & Read */
     @Test
     public void testThatGetOneTeamReturnsTeam() throws Exception {
@@ -141,6 +172,24 @@ public class TeamControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.id").value(teamA.getId())
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.name").value(teamB.getName())
+        );
+    }
+
+    @Test
+    public void testThatPatchUpdatesExistingTeam() throws Exception {
+        TeamEntity teamEntity = TestDataUtil.createTestTeamEntityA();
+        TeamEntity savedTeam = teamService.save(teamEntity);
+
+        TeamDto teamDto = TestDataUtil.createTestTeamDto();
+        teamDto.setId(savedTeam.getId());
+        String teamDtoJson = objectMapper.writeValueAsString(teamDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/teams/" + savedTeam.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(teamDtoJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(teamDto.getName())
         );
     }
 }
