@@ -159,9 +159,9 @@ public class TeamControllerIntegrationTests {
                 MockMvcRequestBuilders.get("/teams")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content.[0].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].name").value(team.getName())
+                MockMvcResultMatchers.jsonPath("$.content.[0].name").value(team.getName())
         );
     }
 
