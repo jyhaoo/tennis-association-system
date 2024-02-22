@@ -16,4 +16,6 @@ public interface TeamService {
     boolean exists(Long id);
 
     TeamEntity partialUpdate(Long id, TeamEntity teamEntity);
+
+    void delete(Long id);
 }

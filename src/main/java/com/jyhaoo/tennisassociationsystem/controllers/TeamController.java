@@ -75,4 +75,10 @@ public class TeamController {
         TeamEntity savedTeamEntity = teamService.partialUpdate(id, teamEntity);
         return new ResponseEntity<>(teamMapper.mapTo(savedTeamEntity), HttpStatus.OK);
     }
+
+    @DeleteMapping(path = "/teams/{id}")
+    public ResponseEntity deleteTeam(@PathVariable("id") Long id) {
+        teamService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -53,4 +53,9 @@ public class TeamServiceImpl implements TeamService {
             return teamRepository.save(existingTeam);
         }).orElseThrow(() -> new RuntimeException("Team does not exist"));
     }
+
+    @Override
+    public void delete(Long id) {
+        teamRepository.deleteById(id);
+    }
 }
