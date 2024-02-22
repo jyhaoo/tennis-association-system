@@ -155,11 +155,11 @@ public class PlayerControllerIntegrationTests {
                 MockMvcRequestBuilders.get("/players")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.content.[0].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].name").value(player.getName())
+                MockMvcResultMatchers.jsonPath("$.content.[0].name").value(player.getName())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].rating").value(player.getRating())
+                MockMvcResultMatchers.jsonPath("$.content.[0].rating").value(player.getRating())
         );
     }
 
