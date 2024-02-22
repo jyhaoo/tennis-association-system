@@ -4,6 +4,8 @@ import com.jyhaoo.tennisassociationsystem.domain.dto.TeamDto;
 import com.jyhaoo.tennisassociationsystem.domain.entities.TeamEntity;
 import com.jyhaoo.tennisassociationsystem.services.TeamService;
 import com.jyhaoo.tennisassociationsystem.mappers.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +33,18 @@ public class TeamController {
         return new ResponseEntity<>(teamMapper.mapTo(savedTeamEntity), HttpStatus.CREATED);
     }
 
+//    @GetMapping(path = "/teams")
+//    public ResponseEntity<List<TeamDto>> listTeams() {
+//        List<TeamEntity> teams = teamService.findAll();
+//        return new ResponseEntity<>(teams.stream()
+//                .map(teamMapper::mapTo)
+//                .collect(Collectors.toList()), HttpStatus.OK);
+//    }
+
     @GetMapping(path = "/teams")
-    public ResponseEntity<List<TeamDto>> listTeams() {
-        List<TeamEntity> teams = teamService.findAll();
-        return new ResponseEntity<>(teams.stream()
-                .map(teamMapper::mapTo)
-                .collect(Collectors.toList()), HttpStatus.OK);
+    public Page<TeamDto> listTeams(Pageable pageable) {
+        Page<TeamEntity> teams = teamService.findAll(pageable);
+        return teams.map(teamMapper::mapTo);
     }
 
     @GetMapping(path = "/teams/{id}")

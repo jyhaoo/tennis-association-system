@@ -5,6 +5,8 @@ import com.jyhaoo.tennisassociationsystem.domain.entities.TeamEntity;
 import com.jyhaoo.tennisassociationsystem.mappers.Mapper;
 import com.jyhaoo.tennisassociationsystem.repositories.TeamRepository;
 import com.jyhaoo.tennisassociationsystem.services.TeamService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +35,11 @@ public class TeamServiceImpl implements TeamService {
                 .findAll()
                 .spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<TeamEntity> findAll(Pageable pageable) {
+        return teamRepository.findAll(pageable);
     }
 
     @Override
