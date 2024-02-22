@@ -3,6 +3,8 @@ package com.jyhaoo.tennisassociationsystem.services.impl;
 import com.jyhaoo.tennisassociationsystem.domain.entities.PlayerEntity;
 import com.jyhaoo.tennisassociationsystem.repositories.PlayerRepository;
 import com.jyhaoo.tennisassociationsystem.services.PlayerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +33,11 @@ public class PlayerServiceImpl implements PlayerService {
                 .spliterator(),
                 false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<PlayerEntity> findAll(Pageable pageable) {
+        return playerRepository.findAll(pageable);
     }
 
     @Override

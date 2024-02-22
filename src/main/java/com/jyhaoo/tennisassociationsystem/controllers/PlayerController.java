@@ -4,6 +4,8 @@ import com.jyhaoo.tennisassociationsystem.domain.dto.PlayerDto;
 import com.jyhaoo.tennisassociationsystem.domain.entities.PlayerEntity;
 import com.jyhaoo.tennisassociationsystem.mappers.Mapper;
 import com.jyhaoo.tennisassociationsystem.services.PlayerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +34,9 @@ public class PlayerController {
     }
 
     @GetMapping(path = "/players")
-    public List<PlayerDto> listPlayers() {
-        List<PlayerEntity> players = playerService.findAll();
-        return players.stream()
-                .map(playerMapper::mapTo)
-                .collect(Collectors.toList());
+    public Page<PlayerDto> listPlayers(Pageable pageable) {
+        Page<PlayerEntity> players = playerService.findAll(pageable);
+        return players.map(playerMapper::mapTo);
     }
 
     @GetMapping(path = "/players/{id}")
