@@ -44,4 +44,13 @@ public class TeamServiceImpl implements TeamService {
     public boolean exists(Long id) {
         return teamRepository.existsById(id);
     }
+
+    @Override
+    public TeamEntity partialUpdate(Long id, TeamEntity teamEntity) {
+        teamEntity.setId(id);
+        return teamRepository.findById(id).map(existingTeam -> {
+            Optional.ofNullable(teamEntity.getName()).ifPresent(existingTeam::setName);
+            return teamRepository.save(existingTeam);
+        }).orElseThrow(() -> new RuntimeException("Team does not exist"));
+    }
 }

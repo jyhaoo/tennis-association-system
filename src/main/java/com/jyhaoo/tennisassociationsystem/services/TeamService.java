@@ -14,4 +14,6 @@ public interface TeamService {
     Optional<TeamEntity> findOne(Long id);
 
     boolean exists(Long id);
+
+    TeamEntity partialUpdate(Long id, TeamEntity teamEntity);
 }

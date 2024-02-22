@@ -1,6 +1,7 @@
 package com.jyhaoo.tennisassociationsystem;
 
 import com.jyhaoo.tennisassociationsystem.domain.dto.PlayerDto;
+import com.jyhaoo.tennisassociationsystem.domain.dto.TeamDto;
 import com.jyhaoo.tennisassociationsystem.domain.entities.PlayerEntity;
 import com.jyhaoo.tennisassociationsystem.domain.entities.TeamEntity;
 
@@ -58,7 +59,6 @@ public final class TestDataUtil {
         return TeamEntity.builder()
                 .id(1L)
                 .name("East Side Eagles")
-                // .teammates(null)
                 .build();
     }
 
@@ -66,6 +66,13 @@ public final class TestDataUtil {
         return TeamEntity.builder()
                 .id(2L)
                 .name("West Side Wall")
+                .build();
+    }
+
+    public static TeamDto createTestTeamDto() {
+        return TeamDto.builder()
+                .id(1L)
+                .name("Only Serve and Volley Team")
                 .build();
     }
 }
