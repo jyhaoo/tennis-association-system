@@ -128,6 +128,17 @@ public class TeamControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
+    @Test
+    public void testThatDeleteTeamReturnsHttpStatus400() throws Exception {
+        TeamEntity team = TestDataUtil.createTestTeamEntityA();
+        teamService.save(team);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/teams/" + team.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
     /* Create & Read */
     @Test
     public void testThatGetOneTeamReturnsTeam() throws Exception {
@@ -190,6 +201,19 @@ public class TeamControllerIntegrationTests {
                         .content(teamDtoJson)
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.name").value(teamDto.getName())
+        );
+    }
+
+    @Test
+    public void testThatDeleteExistingTeam() throws Exception {
+        TeamEntity teamEntity = TestDataUtil.createTestTeamEntityA();
+        TeamEntity savedTeam = teamService.save(teamEntity);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/teams/" + savedTeam.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
         );
     }
 }
